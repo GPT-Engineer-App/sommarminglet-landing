@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, VStack, Text, Box, Image, Heading, Flex, Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
+import { Container, VStack, Text, Box, Heading, Flex, Editable, EditableInput, EditablePreview, useToast } from "@chakra-ui/react";
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://your-supabase-url.supabase.co';
@@ -13,6 +13,7 @@ const LandingPage = () => {
     date: '2023-12-31',
     location: 'Stockholm'
   });
+  const toast = useToast();
 
   useEffect(() => {
     const fetchEventInfo = async () => {
@@ -23,9 +24,18 @@ const LandingPage = () => {
       if (data) {
         setEventInfo(data);
       }
+      if (error) {
+        toast({
+          title: "Error fetching event info",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     };
     fetchEventInfo();
-  }, []);
+  }, [toast]);
 
   return (
     <Container maxW="container.xl" p={4}>

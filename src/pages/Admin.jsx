@@ -6,7 +6,7 @@ const supabaseUrl = 'https://your-supabase-url.supabase.co';
 const supabaseKey = 'your-anon-key';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const Index = () => {
+const Admin = () => {
   const [image, setImage] = useState(null);
   const [eventInfo, setEventInfo] = useState({
     title: '',
@@ -71,4 +71,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Admin;
