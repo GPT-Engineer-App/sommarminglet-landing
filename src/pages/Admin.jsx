@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, VStack, Text, Box, Image, Input, Button, FormControl, FormLabel, Heading, Flex } from "@chakra-ui/react";
+import { Container, VStack, Text, Box, Image, Input, Button, FormControl, FormLabel, Heading, Flex, useToast } from "@chakra-ui/react";
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://your-supabase-url.supabase.co';
@@ -14,6 +14,8 @@ const Admin = () => {
     date: '',
     location: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const handleImageUpload = async (e) => {
     let file = e.target.files[0];
@@ -29,6 +31,37 @@ const Admin = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventInfo({ ...eventInfo, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .insert([eventInfo]);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Event created.",
+        description: "Your event has been created successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "An error occurred.",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,6 +99,14 @@ const Admin = () => {
           </FormControl>
           {image && <Image src={image} alt="Event" mt={4} />}
         </Box>
+        <Button
+          mt={4}
+          colorScheme="blue"
+          isLoading={isLoading}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
       </VStack>
     </Container>
   );
