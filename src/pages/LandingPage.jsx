@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, VStack, Text, Box, Heading, Flex, Editable, EditableInput, EditablePreview, useToast } from "@chakra-ui/react";
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://your-supabase-url.supabase.co';
-const supabaseKey = 'your-anon-key';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const LandingPage = () => {
